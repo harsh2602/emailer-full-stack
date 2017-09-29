@@ -17,8 +17,10 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback'
     },
-    accessToken => {
-      console.log(accessToken);
+    (accessToken, refreshToken, profile, done) => {
+      console.log('access token', accessToken);
+      console.log('refresh token', refreshToken);
+      console.log('profile', profile);
     }
   )
 );
@@ -34,6 +36,13 @@ app.get(
     scope: ['profile', 'email']
   })
 );
+
+// GET /auth/google/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/auth/google/callback', passport.authenticate('google'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
