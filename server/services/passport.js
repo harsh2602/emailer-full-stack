@@ -36,7 +36,8 @@ passport.use(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback'
+      callbackURL: '/auth/google/callback',
+      proxy: true
     },
     // Create a new user in MongoDB
     (accessToken, refreshToken, profile, done) => {
