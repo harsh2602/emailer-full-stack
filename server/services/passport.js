@@ -40,23 +40,20 @@ passport.use(
       proxy: true
     },
     // Create a new user in MongoDB
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       /**
       * @function findOne: Find one record based on a condition
       * @return Promise
       * @param existingUser: is an object i.e. either a MongooseModel Instance or a null object
       */
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // User already exists with the ID
-          done(null, existingUser); // Communicate to passport that process it finished
-        } else {
-          // Create new user with new ID
-          new User({ googleId: profile.id }) // Represents a model instance
-            .save()
-            .then(user => done(null, user)); // Represents another model instance although a similar one to the previous
-        }
-      });
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if (existingUser) {
+        // User already exists with the ID
+        return done(null, existingUser); // Communicate to passport that process it finished
+      }
+      // Create new user with new ID
+      const user = await new User({ googleId: profile.id }).save(); // Represents a model instance
+      done(null, user); // Represents another model instance although a similar one to the previous
     }
   )
 );
