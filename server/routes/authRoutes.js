@@ -9,21 +9,29 @@ module.exports = app => {
   app.get(
     '/auth/google',
     passport.authenticate('google', {
-      scope: ['profile', 'email']
+      scope: ['profile', 'email'],
+      prompt: 'select_account'
     })
   );
 
+  // GET logout a user and redirect to application root
   app.get('/api/logout', (req, res) => {
     req.logout(); // logout is attached to the request object by passport
-    res.send(req.user);
+    res.redirect('/');
   });
 
   // GET /auth/google/callback
   //   Use passport.authenticate() as route middleware to authenticate the
   //   request.
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+      res.redirect('/surveys');
+    }
+  );
 
-  // GET
+  // GET current logged in user
   app.get('/api/current_user', (req, res) => {
     res.send(req.user); // Passport attached the user property to the request object
   });
