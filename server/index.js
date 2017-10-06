@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session'); // Manages cookies for the session
 const passport = require('passport'); // Passport here needs to keep track of user authentication state by using cookies
+const bodyParser = require('body-parser');
 const keys = require('../config/keys');
 
 /**
@@ -17,6 +18,9 @@ mongoose.connect(keys.mongoURI);
 // Create an instance of the application
 const app = express();
 
+// Parser middleware
+app.use(bodyParser.json());
+
 // Express needs to make use of cookies for the application
 app.use(
   // Cookie Session will take the passed object and assign it to req.session property
@@ -30,7 +34,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// IIFE's defined below
 require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
