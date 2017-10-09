@@ -18,7 +18,7 @@ mongoose.connect(keys.mongoURI);
 // Create an instance of the application
 const app = express();
 
-// Parser middleware
+// Parser middleware: Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 app.use(bodyParser.json());
 
 // Express needs to make use of cookies for the application
