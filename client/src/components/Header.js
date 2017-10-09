@@ -21,6 +21,14 @@ class Header extends Component {
           </li>,
           <li key="2">
             <a href="/api/logout">Logout</a>
+          </li>,
+          <li key="3">{this.props.auth.name}</li>,
+          <li key="4">
+            <img
+              style={styles.imageStyle}
+              alt={this.props.auth.name}
+              src={this.props.auth.image}
+            />
           </li>
         ];
     }
@@ -45,5 +53,12 @@ function mapStateToProps({ auth }) {
     auth
   };
 }
+
+const styles = {
+  imageStyle: {
+    padding: '8px',
+    borderRadius: '50%'
+  }
+};
 
 export default connect(mapStateToProps)(Header);
