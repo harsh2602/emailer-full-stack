@@ -46,13 +46,21 @@ passport.use(
       * @return Promise
       * @param existingUser: is an object i.e. either a MongooseModel Instance or a null object
       */
-      const existingUser = await User.findOne({ googleId: profile.id });
+      const existingUser = await User.findOne({
+        googleId: profile.id,
+        name: profile.name.givenName,
+        image: profile.photos[0].value
+      });
       if (existingUser) {
         // User already exists with the ID
         return done(null, existingUser); // Communicate to passport that process it finished
       }
       // Create new user with new ID
-      const user = await new User({ googleId: profile.id }).save(); // Represents a model instance
+      const user = await new User({
+        googleId: profile.id,
+        name: profile.name.givenName,
+        image: profile.photos[0].value
+      }).save(); // Represents a model instance
       done(null, user); // Represents another model instance although a similar one to the previous
     }
   )
